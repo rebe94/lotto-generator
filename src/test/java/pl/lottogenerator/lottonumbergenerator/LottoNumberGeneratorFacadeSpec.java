@@ -2,7 +2,7 @@ package pl.lottogenerator.lottonumbergenerator;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.lottogenerator.model.GenerateConfiguration;
+import pl.lottogenerator.lottonumbergenerator.dto.GenerateConfiguration;
 
 import java.util.Set;
 
@@ -25,11 +25,10 @@ class LottoNumberGeneratorFacadeSpec {
         int amountOfNumbers = 6;
         int lowestNumber = 1;
         int highestNumber = 99;
-        GenerateConfiguration generateConfiguration = GenerateConfiguration.of
-                (amountOfNumbers, lowestNumber, highestNumber);
+        GenerateConfiguration generateConfiguration = new GenerateConfiguration(amountOfNumbers, lowestNumber, highestNumber);
 
         // when
-        Set<Integer> winningNumbers = lottoNumberGeneratorFacade.winningNumbers(generateConfiguration);
+        Set<Integer> winningNumbers = lottoNumberGeneratorFacade.generateWinningNumbers(generateConfiguration);
 
         // then
         assertAll(
