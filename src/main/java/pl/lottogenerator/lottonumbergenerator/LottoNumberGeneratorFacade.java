@@ -1,19 +1,26 @@
 package pl.lottogenerator.lottonumbergenerator;
 
-import pl.lottogenerator.lottonumbergenerator.dto.GenerateConfiguration;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Set;
-import java.util.TreeSet;
 
 public class LottoNumberGeneratorFacade {
 
-    public Set<Integer> generateWinningNumbers(GenerateConfiguration generateConfiguration) {
-        int randomNumberBound = (generateConfiguration.getHighestNumber() - generateConfiguration.getLowestNumber()) + 1;
-        Set<Integer> winningNumbers = new TreeSet<>();
-        while (winningNumbers.size() < generateConfiguration.getAmountOfNumbers()) {
-            int randomNumber = (int) (Math.random() * randomNumberBound) + generateConfiguration.getLowestNumber();
-            winningNumbers.add(randomNumber);
-        }
-        return winningNumbers;
+    private final WinningNumberRepository winningNumberRepository;
+    private final NumberGenerator numberGenerator;
+
+    LottoNumberGeneratorFacade(WinningNumberRepository winningNumberRepository, NumberGenerator numberGenerator) {
+        this.winningNumberRepository = winningNumberRepository;
+        this.numberGenerator = numberGenerator;
+    }
+
+    public Set<Integer> getWinningNumbers() {
+        return winningNumberRepository.getNumbers();
+    }
+
+     @Scheduled(cron = "*/30 * * * * *")
+     //@Scheduled(cron = "0 0 19 * * *")
+     void generateWinningNumbers() {
+        numberGenerator.generateWinningNumbers();
     }
 }

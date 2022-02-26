@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class WinningNumbers {
+public class WinningNumbersDto {
 
     private Set<Integer> winningNumbers;
 }

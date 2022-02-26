@@ -2,6 +2,9 @@ package pl.lottogenerator.lottonumbergenerator;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import pl.lottogenerator.lottonumbergenerator.dto.GenerateConfigurationDto;
 
 import java.util.Set;
@@ -15,11 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class LottoNumberGeneratorFacadeSpec {
+@SpringBootTest
+class LottoNumberGeneratorFacadeIntegrationSpec {
 
-    private final GenerateConfiguration generateConfiguration = mock(GenerateConfiguration.class);
-    private final LottoNumberGeneratorFacade lottoNumberGeneratorFacade =
-            new LottoNumberGeneratorConfiguration().lottoNumberGeneratorFacadeForTests(generateConfiguration);
+    @MockBean
+    private GenerateConfiguration generateConfiguration;
+    @Autowired
+    private LottoNumberGeneratorFacade lottoNumberGeneratorFacade;
 
     private final int amountOfNumbers = 6;
     private final int lowestNumber = 1;
