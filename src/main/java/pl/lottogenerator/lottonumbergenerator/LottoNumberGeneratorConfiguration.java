@@ -25,11 +25,6 @@ class LottoNumberGeneratorConfiguration {
     }
 
     @Bean
-    NumberGenerator numberGenerator(GenerateConfiguration generateConfiguration, WinningNumberRepository winningNumberRepository) {
-        return new NumberGeneratorImpl(generateConfiguration, winningNumberRepository);
-    }
-
-    @Bean
     LottoNumberGeneratorFacade lottoNumberGeneratorFacade(GenerateConfiguration generateConfiguration, WinningNumberRepository winningNumberRepository) {
         NumberGenerator numberGenerator = new NumberGeneratorImpl(generateConfiguration, winningNumberRepository);
         return new LottoNumberGeneratorFacade(winningNumberRepository, numberGenerator);
