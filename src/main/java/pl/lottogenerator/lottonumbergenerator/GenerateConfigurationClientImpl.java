@@ -10,31 +10,29 @@ import pl.lottogenerator.lottonumbergenerator.dto.GenerateConfigurationDto;
 
 import java.util.UUID;
 
-class GenerateConfigurationProxyImpl implements GenerateConfiguration {
+class GenerateConfigurationClientImpl implements GenerateConfiguration {
 
     private final RestTemplate rest;
-
     @Value("${name.configuration.service.url}")
-    private String configurationServiceUrl;
+    private final String configurationServiceUrl;
 
-    GenerateConfigurationProxyImpl(RestTemplate rest) {
+    public GenerateConfigurationClientImpl(RestTemplate rest, String configurationServiceUrl) {
         this.rest = rest;
+        this.configurationServiceUrl = configurationServiceUrl;
     }
 
     public GenerateConfigurationDto getGenerateConfiguration() {
         String uri = configurationServiceUrl + "/configuration";
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("requestId", UUID.randomUUID().toString());
-
         HttpEntity<HttpHeaders> httpEntity = new HttpEntity<>(headers);
 
         ResponseEntity<GenerateConfigurationDto> response =
-                rest.exchange(uri,
+                rest.exchange(
+                        uri,
                         HttpMethod.GET,
                         httpEntity,
                         GenerateConfigurationDto.class);
-
         return response.getBody();
     }
 }

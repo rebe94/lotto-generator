@@ -1,10 +1,11 @@
 package pl.lottogenerator.lottonumbergenerator;
 
-import java.util.Set;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-interface WinningNumberRepository {
+import java.time.LocalDate;
+import java.util.Optional;
 
-    void save(Set<Integer> numbers);
+public interface WinningNumberRepository extends MongoRepository<WinningNumbers, String> {
 
-    Set<Integer> getNumbers();
+    Optional<WinningNumbers> findByDrawingDate(LocalDate drawingDate);
 }

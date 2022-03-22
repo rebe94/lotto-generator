@@ -1,6 +1,8 @@
 package pl.lottogenerator.lottonumbergenerator;
 
+import java.time.LocalDate;
+
 interface NumberGenerator {
 
-    void generateWinningNumbers();
+    void generateWinningNumbers(LocalDate drawingDate);
 }
