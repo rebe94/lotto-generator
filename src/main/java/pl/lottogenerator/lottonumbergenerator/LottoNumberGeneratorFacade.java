@@ -9,24 +9,23 @@ import java.util.Set;
 
 public class LottoNumberGeneratorFacade {
 
-    private final WinningNumberRepository winningNumberRepository;
+    private final WinningNumbersRepository winningNumbersRepository;
     private final NumberGenerator numberGenerator;
 
-    LottoNumberGeneratorFacade(WinningNumberRepository winningNumberRepository, NumberGenerator numberGenerator) {
-        this.winningNumberRepository = winningNumberRepository;
+    LottoNumberGeneratorFacade(WinningNumbersRepository winningNumbersRepository, NumberGenerator numberGenerator) {
+        this.winningNumbersRepository = winningNumbersRepository;
         this.numberGenerator = numberGenerator;
     }
 
     public Set<Integer> getWinningNumbers(LocalDate drawingDate) {
-        Optional<WinningNumbers> winningNumbers = winningNumberRepository.findByDrawingDate(drawingDate);
+        Optional<WinningNumbers> winningNumbers = winningNumbersRepository.findByDrawingDate(drawingDate);
         if (winningNumbers.isEmpty()) {
             return Collections.emptySet();
         }
         return winningNumbers.get().getNumbers();
     }
 
-    @Scheduled(cron = "*/30 * * * * *")
-    //@Scheduled(cron = "0 0 19 * * *")
+    @Scheduled(cron = "0 0 19 * * *")
     private void generateWinningNumbersScheduled() {
         LocalDate drawingDateScheduled = LocalDate.now();
         generateWinningNumbers(drawingDateScheduled);

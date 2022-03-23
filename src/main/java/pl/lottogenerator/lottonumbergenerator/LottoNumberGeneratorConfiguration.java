@@ -19,13 +19,18 @@ public class LottoNumberGeneratorConfiguration {
     }
 
     @Bean
-    LottoNumberGeneratorFacade lottoNumberGeneratorFacade(GenerateConfiguration generateConfiguration, WinningNumberRepository winningNumberRepository) {
-        NumberGenerator numberGenerator = new NumberGeneratorImpl(generateConfiguration, winningNumberRepository);
-        return new LottoNumberGeneratorFacade(winningNumberRepository, numberGenerator);
+    LottoNumberGeneratorFacade lottoNumberGeneratorFacade(GenerateConfiguration generateConfiguration, WinningNumbersRepository winningNumbersRepository) {
+        NumberGenerator numberGenerator = new NumberGeneratorImpl(generateConfiguration, winningNumbersRepository);
+        return new LottoNumberGeneratorFacade(winningNumbersRepository, numberGenerator);
+    }
+
+    @Bean
+    WinningNumbersDataLoader winnerDataLoader(WinningNumbersRepository winningNumbersRepository) {
+        return new WinningNumbersDataLoader(winningNumbersRepository);
     }
 
     public LottoNumberGeneratorFacade lottoNumberGeneratorFacadeForTests(String configurationServiceUrl){
         GenerateConfiguration generateConfiguration = new GenerateConfigurationClientImpl(new RestTemplate(), configurationServiceUrl);
-        return lottoNumberGeneratorFacade(generateConfiguration, new InMemoryWinningNumberRepository());
+        return lottoNumberGeneratorFacade(generateConfiguration, new InMemoryWinningNumbersRepository());
     }
 }

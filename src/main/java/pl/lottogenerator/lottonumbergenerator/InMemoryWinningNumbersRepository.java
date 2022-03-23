@@ -8,14 +8,11 @@ import org.springframework.data.repository.query.FluentQuery;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Function;
 
-class InMemoryWinningNumberRepository implements WinningNumberRepository {
+class InMemoryWinningNumbersRepository implements WinningNumbersRepository {
 
     private final List<WinningNumbers> winningNumbersList = new ArrayList<>();
 

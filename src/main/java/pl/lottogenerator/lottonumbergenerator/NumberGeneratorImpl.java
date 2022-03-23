@@ -13,17 +13,17 @@ import static org.slf4j.LoggerFactory.getLogger;
 class NumberGeneratorImpl implements NumberGenerator {
 
     private final GenerateConfiguration generateConfiguration;
-    private final WinningNumberRepository winningNumberRepository;
+    private final WinningNumbersRepository winningNumbersRepository;
 
     private static final Logger LOGGER = getLogger(NumberGeneratorImpl.class.getName());
 
-    NumberGeneratorImpl(GenerateConfiguration generateConfiguration, WinningNumberRepository winningNumberRepository) {
+    NumberGeneratorImpl(GenerateConfiguration generateConfiguration, WinningNumbersRepository winningNumbersRepository) {
         this.generateConfiguration = generateConfiguration;
-        this.winningNumberRepository = winningNumberRepository;
+        this.winningNumbersRepository = winningNumbersRepository;
     }
 
     public void generateWinningNumbers(LocalDate drawingDate) {
-        if (winningNumberRepository.findByDrawingDate(drawingDate).isPresent()) {
+        if (winningNumbersRepository.findByDrawingDate(drawingDate).isPresent()) {
             LOGGER.warn("Failed attempt of generating winning numbers. Winning numbers for " + drawingDate + " already exist.");
             return;
         }
@@ -33,7 +33,7 @@ class NumberGeneratorImpl implements NumberGenerator {
                 .numbers(generatedNumbers)
                 .drawingDate(drawingDate)
                 .build();
-        winningNumberRepository.insert(winningNumbers);
+        winningNumbersRepository.insert(winningNumbers);
         LOGGER.info("Numbers are generated for " + drawingDate + " as scheduled. The winning numbers: " + generatedNumbers);
     }
 

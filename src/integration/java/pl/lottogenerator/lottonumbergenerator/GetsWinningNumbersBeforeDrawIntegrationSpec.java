@@ -6,6 +6,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.SocketUtils;
 
@@ -16,29 +20,38 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
 
-@Tag("WithoutSpringTest")
-class LottoNumberGeneratorFacadeSpec {
+@Tag("SpringTest")
+@SpringBootTest
+class GetsWinningNumbersBeforeDrawIntegrationSpec extends BaseIntegrationSpec {
 
-    private final int port = SocketUtils.findAvailableTcpPort();
-    private final String urlServiceForTest = "http://localhost:" + port + "/";
+    private static final int port = SocketUtils.findAvailableTcpPort();
+    private static final String configurationServiceUrlForTest = "http://localhost:" + port + "/";
 
-    private final LottoNumberGeneratorFacade lottoNumberGeneratorFacade =
-            new LottoNumberGeneratorConfiguration().lottoNumberGeneratorFacadeForTests(urlServiceForTest);
+    @Autowired
+    private LottoNumberGeneratorFacade lottoNumberGeneratorFacade;
+    @Autowired
+    private WinningNumbersRepository winningNumbersRepository;
     private WireMockServer wireMockServer;
 
     private final int year = 2000;
     private final int month = 1;
     private final int day = 1;
-    private final LocalDate DRAW_DATE = LocalDate.of(year, month, day);
     private final LocalDate BEFORE_DRAW_DATE = LocalDate.of(year, month, day);
     private final int amountOfNumbers = 6;
     private final int lowestNumber = 1;
     private final int highestNumber = 99;
+
+    @TestConfiguration
+    public static class IntegrationTestConfiguration {
+
+        @Bean
+        LottoNumberGeneratorFacade lottoNumberGeneratorFacade() {
+            return new LottoNumberGeneratorConfiguration()
+                    .lottoNumberGeneratorFacadeForTests(configurationServiceUrlForTest);
+        }
+    }
 
     @BeforeEach
     void setup() {
@@ -49,25 +62,8 @@ class LottoNumberGeneratorFacadeSpec {
 
     @AfterEach
     void tearDown() {
+        winningNumbersRepository.deleteAll();
         wireMockServer.stop();
-    }
-
-    @Test
-    public void returns_winning_numbers_with_correct_configuration_when_gives_draw_day_which_has_took_place_already() {
-        // given
-        requestToGetGenerateConfiguration();
-        lottoNumberGeneratorFacade.generateWinningNumbers(DRAW_DATE);
-        // when
-        Set<Integer> winningNumbers = lottoNumberGeneratorFacade.getWinningNumbers(DRAW_DATE);
-        // then
-        assertAll(
-                () -> assumingThat(winningNumbers != null,
-                        () -> assertThat(winningNumbers.size(), equalTo(amountOfNumbers))),
-                () -> assumingThat(winningNumbers != null,
-                        () -> assertThat(winningNumbers.stream().max(Integer::compareTo).get(), lessThanOrEqualTo(highestNumber))),
-                () -> assumingThat(winningNumbers != null,
-                        () -> assertThat(winningNumbers.stream().min(Integer::compareTo).get(), greaterThanOrEqualTo(lowestNumber)))
-        );
     }
 
     @Test
