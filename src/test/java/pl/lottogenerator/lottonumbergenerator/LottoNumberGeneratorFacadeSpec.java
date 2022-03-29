@@ -77,8 +77,7 @@ class LottoNumberGeneratorFacadeSpec {
         // when
         Set<Integer> winningNumbers = lottoNumberGeneratorFacade.getWinningNumbers(BEFORE_DRAW_DATE);
         // then
-        assumingThat(winningNumbers != null,
-                () -> assertThat(winningNumbers.size(), equalTo(0)));
+        assumingThat(winningNumbers != null, () -> assertThat(winningNumbers.size(), equalTo(0)));
     }
 
     private void requestToGetGenerateConfiguration() {

@@ -16,9 +16,9 @@ class InMemoryWinningNumbersRepository implements WinningNumbersRepository {
 
     private final List<WinningNumbers> winningNumbersList = new ArrayList<>();
 
-    public Optional<WinningNumbers> findByDrawingDate(LocalDate drawingDate) {
+    public Optional<WinningNumbers> findByDrawDate(LocalDate drawDate) {
         return winningNumbersList.stream()
-                .filter(e -> e.getDrawingDate().equals(drawingDate))
+                .filter(e -> e.getDrawDate().equals(drawDate))
                 .findFirst();
     }
 

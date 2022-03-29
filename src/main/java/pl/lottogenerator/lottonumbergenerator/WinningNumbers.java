@@ -17,11 +17,11 @@ class WinningNumbers {
     @Id
     private String id;
     private Set<Integer> numbers;
-    private LocalDate drawingDate;
+    private LocalDate drawDate;
 
     @Builder
-    public WinningNumbers(Set<Integer> numbers, LocalDate drawingDate) {
+    public WinningNumbers(Set<Integer> numbers, LocalDate drawDate) {
         this.numbers = numbers;
-        this.drawingDate = drawingDate;
+        this.drawDate = drawDate;
     }
 }

@@ -1,5 +1,7 @@
 package pl.lottogenerator.lottonumbergenerator;
 
+import lombok.Getter;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -8,9 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import pl.lottogenerator.lottonumbergenerator.dto.GenerateConfigurationDto;
 
-import java.util.UUID;
+import static org.slf4j.LoggerFactory.getLogger;
+import static pl.lottogenerator.lottonumbergenerator.GenerateConfigurationMessageProvider.failed;
+import static pl.lottogenerator.lottonumbergenerator.GenerateConfigurationMessageProvider.valid;
 
 class GenerateConfigurationClientImpl implements GenerateConfiguration {
+
+    private static final Logger LOGGER = getLogger(GenerateConfigurationClientImpl.class.getName());
 
     private final RestTemplate rest;
     @Value("${name.configuration.service.url}")
@@ -21,18 +27,32 @@ class GenerateConfigurationClientImpl implements GenerateConfiguration {
         this.configurationServiceUrl = configurationServiceUrl;
     }
 
+    @Getter
+    private static class ReceivedGenerateConfigurationDto {
+        Integer amountOfNumbers, lowestNumber, highestNumber;
+    }
+
     public GenerateConfigurationDto getGenerateConfiguration() {
         String uri = configurationServiceUrl + "/configuration";
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("requestId", UUID.randomUUID().toString());
-        HttpEntity<HttpHeaders> httpEntity = new HttpEntity<>(headers);
+        HttpEntity<HttpHeaders> httpEntity = new HttpEntity<>(new HttpHeaders());
 
-        ResponseEntity<GenerateConfigurationDto> response =
-                rest.exchange(
-                        uri,
-                        HttpMethod.GET,
-                        httpEntity,
-                        GenerateConfigurationDto.class);
-        return response.getBody();
+        try {
+            ResponseEntity<ReceivedGenerateConfigurationDto> response =
+                    rest.exchange(
+                            uri,
+                            HttpMethod.GET,
+                            httpEntity,
+                            ReceivedGenerateConfigurationDto.class);
+            return valid(response.getBody().getAmountOfNumbers(),
+                    response.getBody().getLowestNumber(),
+                    response.getBody().getHighestNumber());
+        } catch (RuntimeException exception) {
+            processException(exception);
+        }
+        return failed();
+    }
+
+    private void processException(Exception exception) {
+        LOGGER.error("Http request execution failed.", exception);
     }
 }

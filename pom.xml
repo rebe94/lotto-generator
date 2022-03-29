@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pl.lotto</groupId>
-    <artifactId>lotto-spring</artifactId>
+    <artifactId>lotto-generator</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>lotto-spring</name>
-    <description>lotto-spring</description>
+    <name>lotto-generator</name>
+    <description>lotto-generator</description>
     <properties>
         <java.version>17</java.version>
     </properties>

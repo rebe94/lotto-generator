@@ -22,19 +22,24 @@ class NumberGeneratorImpl implements NumberGenerator {
         this.winningNumbersRepository = winningNumbersRepository;
     }
 
-    public void generateWinningNumbers(LocalDate drawingDate) {
-        if (winningNumbersRepository.findByDrawingDate(drawingDate).isPresent()) {
-            LOGGER.warn("Failed attempt of generating winning numbers. Winning numbers for " + drawingDate + " already exist.");
+    public void generateWinningNumbers(LocalDate drawDate) {
+        if (winningNumbersRepository.findByDrawDate(drawDate).isPresent()) {
+            LOGGER.warn("Failed attempt of generating winning numbers. Winning numbers for " + drawDate + " already exist.");
+            return;
+        }
+        GenerateConfigurationDto generateConfigurationDto = generateConfiguration.getGenerateConfiguration();
+        if (generateConfigurationDto.getValidationMessage().equals(GenerateConfigurationDto.ValidationMessage.FAILED)) {
+            LOGGER.error("Couldn't generate winning numbers as scheduled for " + drawDate);
             return;
         }
 
-        Set<Integer> generatedNumbers = generateNumbers(generateConfiguration.getGenerateConfiguration());
+        Set<Integer> generatedNumbers = generateNumbers(generateConfigurationDto);
         WinningNumbers winningNumbers = WinningNumbers.builder()
                 .numbers(generatedNumbers)
-                .drawingDate(drawingDate)
+                .drawDate(drawDate)
                 .build();
         winningNumbersRepository.insert(winningNumbers);
-        LOGGER.info("Numbers are generated for " + drawingDate + " as scheduled. The winning numbers: " + generatedNumbers);
+        LOGGER.info("Numbers are generated for " + drawDate + " as scheduled. The winning numbers: " + generatedNumbers);
     }
 
     private Set<Integer> generateNumbers(GenerateConfigurationDto generateConfigurationDto) {

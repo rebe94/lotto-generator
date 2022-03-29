@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 interface NumberGenerator {
 
-    void generateWinningNumbers(LocalDate drawingDate);
+    void generateWinningNumbers(LocalDate drawDate);
 }

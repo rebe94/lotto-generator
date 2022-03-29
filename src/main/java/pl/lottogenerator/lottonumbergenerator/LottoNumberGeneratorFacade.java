@@ -17,8 +17,8 @@ public class LottoNumberGeneratorFacade {
         this.numberGenerator = numberGenerator;
     }
 
-    public Set<Integer> getWinningNumbers(LocalDate drawingDate) {
-        Optional<WinningNumbers> winningNumbers = winningNumbersRepository.findByDrawingDate(drawingDate);
+    public Set<Integer> getWinningNumbers(LocalDate drawDate) {
+        Optional<WinningNumbers> winningNumbers = winningNumbersRepository.findByDrawDate(drawDate);
         if (winningNumbers.isEmpty()) {
             return Collections.emptySet();
         }
@@ -27,11 +27,11 @@ public class LottoNumberGeneratorFacade {
 
     @Scheduled(cron = "0 0 19 * * *")
     private void generateWinningNumbersScheduled() {
-        LocalDate drawingDateScheduled = LocalDate.now();
-        generateWinningNumbers(drawingDateScheduled);
+        LocalDate drawDateScheduled = LocalDate.now();
+        generateWinningNumbers(drawDateScheduled);
     }
 
-    public void generateWinningNumbers(LocalDate drawingDate) {
-        numberGenerator.generateWinningNumbers(drawingDate);
+    public void generateWinningNumbers(LocalDate drawDate) {
+        numberGenerator.generateWinningNumbers(drawDate);
     }
 }

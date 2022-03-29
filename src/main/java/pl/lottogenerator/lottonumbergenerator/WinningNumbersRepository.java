@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface WinningNumbersRepository extends MongoRepository<WinningNumbers, String> {
 
-    Optional<WinningNumbers> findByDrawingDate(LocalDate drawingDate);
+    Optional<WinningNumbers> findByDrawDate(LocalDate drawDate);
 }
