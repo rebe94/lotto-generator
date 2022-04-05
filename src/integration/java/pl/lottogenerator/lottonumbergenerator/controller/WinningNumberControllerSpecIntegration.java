@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("SpringTest")
 @SpringBootTest
 @AutoConfigureMockMvc
-class WinningNumberControllerSpec {
+class WinningNumberControllerSpecIntegration {
 
     @MockBean
     private LottoNumberGeneratorFacade lottoNumberGeneratorFacade;

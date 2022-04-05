@@ -2,7 +2,6 @@ package pl.lottogenerator.lottonumbergenerator;
 
 import lombok.Getter;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,7 +18,6 @@ class GenerateConfigurationClientImpl implements GenerateConfiguration {
     private static final Logger LOGGER = getLogger(GenerateConfigurationClientImpl.class.getName());
 
     private final RestTemplate rest;
-    @Value("${name.configuration.service.url}")
     private final String configurationServiceUrl;
 
     public GenerateConfigurationClientImpl(RestTemplate rest, String configurationServiceUrl) {

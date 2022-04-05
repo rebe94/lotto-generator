@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 @Tag("SpringTest")
 @SpringBootTest
-class GetsWinningNumbersAfterDrawIntegrationSpec extends BaseIntegrationSpec {
+class GetsWinningNumbersAfterDrawSpecIntegration extends BaseSpecIntegration {
 
     private static final int port = SocketUtils.findAvailableTcpPort();
     private static final String configurationServiceUrlForTest = "http://localhost:" + port + "/";

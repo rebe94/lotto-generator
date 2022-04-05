@@ -10,5 +10,5 @@ import pl.lottogenerator.AppRunner;
         properties = "application.environment=integration"
 )
 @TestPropertySource(locations = "classpath:test.properties")
-abstract public class BaseIntegrationSpec {
+abstract public class BaseSpecIntegration {
 }

@@ -3,15 +3,13 @@ package pl.lottogenerator.lottonumbergenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@EnableScheduling
 public class LottoNumberGeneratorConfiguration {
 
-    @Value("${name.configuration.service.url}")
-    String configurationServiceUrl;
+    @Value("${configuration.service.url}")
+    private String configurationServiceUrl;
 
     @Bean
     GenerateConfiguration generateConfiguration() {

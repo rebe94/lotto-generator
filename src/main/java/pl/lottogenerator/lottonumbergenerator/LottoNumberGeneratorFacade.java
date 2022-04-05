@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TimeZone;
 
 public class LottoNumberGeneratorFacade {
 
@@ -25,9 +26,9 @@ public class LottoNumberGeneratorFacade {
         return winningNumbers.get().getNumbers();
     }
 
-    @Scheduled(cron = "0 0 19 * * *")
-    private void generateWinningNumbersScheduled() {
-        LocalDate drawDateScheduled = LocalDate.now();
+    @Scheduled(cron = "0 0 19 * * *", zone = "Europe/Warsaw")
+    private void generateWinningNumbersAsScheduled() {
+        LocalDate drawDateScheduled = LocalDate.now(TimeZone.getTimeZone("Europe/Warsaw").toZoneId());
         generateWinningNumbers(drawDateScheduled);
     }
 
